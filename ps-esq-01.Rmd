@@ -19,6 +19,9 @@ library(sf)
 library(leaflet)
 library(rgdal)
 library(knitr)
+library(magrittr)
+library(kableExtra)
+
 
 
 
@@ -36,8 +39,8 @@ color_ubic <- '#9fbe88'
 #--------------------- Íconos ---------------------
 
 
-icono_info1 <- 'fas fa-cogs'
-icono_info2 <- 'fas fa-edit'
+icono_info1 <- 'fas fa-'
+icono_info2 <- 'fas fa-'
 
 #--------------- Otros parámetros -----------------
 
@@ -51,12 +54,12 @@ caracter_separador <- ','
 
 archivo_datos_PNM <- read.csv('https://raw.githubusercontent.com/EsmeVar/PNM_FASE_5/main/2021_04_28_PNM_INFO_F5.csv', sep = ";")
 
-#convertí aparte la tabla en un shape, es una opción en QGIS y la agrego directamenete y le doy la proyección
+#la tabla convertirla en un shape, en QGIS de csv a shp y la agregarla directamenete y le doy la proyección
 PNM <- st_read("C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/DATOS_PNM/PNM_WGS84_2.shp") %>%
   st_transform(4326) %>%
   st_make_valid()
 
-#para crear un mapa sería bonito agregar las cuencas y hacer coropletas
+#Cuencas para mostrar en el mapa
 cuencas <- st_read("C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/DATOS_PNM/Cuencas hidrograficas/CUencas hidrograficas.shp")%>%
   st_transform(4326) %>%
   st_make_valid()
@@ -130,15 +133,20 @@ Column {.sidebar}
 
 Esmeralda Vargas Madrigal
 
+
+
 **Colaboración:**
 
 Kevin Chavarría Esquivel
+
+Manuel Vargas del Valle
+
 
 Row {data-height=130}
 -----------------------------------------------------------------------
 ### código del punto muestreado {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[5,3])),
+valueBox(value = paste(format(archivo_datos_PNM[1,3])),
          caption = "Código del sitio de muestreo",
          icon = icono_info1, 
          color = color_info
@@ -147,7 +155,7 @@ valueBox(value = paste(format(archivo_datos_PNM[5,3])),
 
 ### Cuerpo de Agua {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[5,2])),
+valueBox(value = paste(format(archivo_datos_PNM[1,2])),
          caption = "Cuerpo de Agua",
          color = color_info
          )
@@ -155,7 +163,7 @@ valueBox(value = paste(format(archivo_datos_PNM[5,2])),
 
 ### Cuenca {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[5,1])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,1])), 
          caption = "Cuenca",
          color = color_info
 )
@@ -163,7 +171,7 @@ valueBox(value = paste(format(archivo_datos_PNM[5,1])),
 
 ### Coordenadas {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[5,12])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,12])), 
          caption = "Longitud (Coordenadas CRTM 05)",
          icon = icono_info2, 
          color = color_info
@@ -172,7 +180,7 @@ valueBox(value = paste(format(archivo_datos_PNM[5,12])),
 
 ### Coordenadas {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[5,13])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,13])), 
          caption = "Latitud (Coordenadas CRTM 05)",
          icon = icono_info2, 
          color = color_info
@@ -184,7 +192,7 @@ Row
 
 ### Provincia {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[5,15])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,15])), 
          caption = "Provincia",
          color = color_ubic
 )
@@ -192,7 +200,7 @@ valueBox(value = paste(format(archivo_datos_PNM[5,15])),
 
 ### Cantón {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[5,16])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,16])), 
          caption = "Cantón",
          color = color_ubic
 )
@@ -200,18 +208,30 @@ valueBox(value = paste(format(archivo_datos_PNM[5,16])),
 
 ### Distrito {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[5,17])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,17])), 
          caption = "Distrito",
          color = color_ubic
 )
 ```
 
-Row {data-height=210}
+Row {data-height=200}
 -----------------------------------------------------------------------
 ### **Resumen de resultados de los índices de la calidad del  agua superficial**
+
 ```{r}
 knitr::kable(
-  archivo_datos_PNM[5:8, 18:24 ], caption = '**Utilizando el Índice Holandes y el Índice Biológico (BMWP-CR), según el Decreto Ejecutivo N°33903-MINAE-S**'
+  archivo_datos_PNM[1:4, 18:24], bootstrap_options = "basic", 
+  align = c("l","c","l","c","c","c","c"),
+  col.names = c("Mes", "Año", "Régimen de Lluvia", "Indice Holandes (IH)", "Interpretación IH", "Indice Biológico (BMWP-CR)", "Interpretación BMWP-CR"),
+  caption = '**Se utilizó el Índice Holandes (IH) y el Índice Biológico (BMWP-CR), según el Decreto Ejecutivo N°33903-MINAE-S**') %>%
+  kable_classic(
+  full_width = TRUE,
+  c("hover"),
+  font_size=16,
+  html_font = "Cambria") %>%
+  row_spec(0, color = "white", background = "#aab984" 
+) %>%
+  row_spec(1:4, background = "#e0e8cc" 
 )
 ```
 
@@ -222,13 +242,13 @@ Row {data-width=400}
 ### **Mapa de ubicación del punto de muestreo**
 ```{r}
 
-leaflet(data = PNM[42:42,]) %>%
+leaflet(data = PNM[41:41,]) %>%
   addTiles() %>%
   addProviderTiles(providers$Stamen.TonerLite, group = "Stamen Toner Lite") %>%
   addProviderTiles(providers$Esri.WorldImagery, group = "Imágenes de ESRI") %>% 
   addMarkers(~LONG, ~LAT, 
              popup= paste(
-               "Sitio de muestreo: ", PNM$Codigo[42]
+               "Sitio de muestreo: ", PNM$Codigo[41]
   )) %>%  
   addLayersControl(
     baseGroups = c("Imágenes de ESRI", "OpenStreetMap", "Stamen Toner Lite")
@@ -262,13 +282,27 @@ muestreo se deberá repetir por una vez, en un período no mayor a 30 días natu
 <br>
 <br>
 
-Row {data-width=50}
+Row {data-width=60}
 -----------------------------------------------------------------------
 ### **Notas:** 
 
-1. En los casos donde el resultado se reporta comio N/A, es debido a que no se tienen resultados del Índice por la imposibilidad de tomar la muestra, ya sea por el acceso al sitio de muestreo o porque no discurría agua por el cauce del cuerpo de agua.
+```{r}
 
-2. Para mayor información sobre el monitoreo de la calidad de los cuerpos de agua superficiales, escríbanos al correo: daguas@da.go.cr 
+NOTAS = data.frame(Notas = c("1.", "2."),
+  Contenido = c(
+    "En los casos donde el resultado se reporta comio N/A, es debido a que no se tienen resultados del Índice por la imposibilidad de tomar la muestra, ya sea por el acceso al sitio de muestreo o porque no discurría agua por el cauce del cuerpo de agua.", 
+    "Para mayor información sobre el monitoreo de la calidad de los cuerpos de agua superficiales, escríbanos al correo: daguas@da.go.cr"
+  )
+)
+
+kable((NOTAS),
+  col.names = NULL,
+  align = c("r","l")
+  ) %>%
+  kable_paper( #estilo de la tabla
+  full_width = TRUE) %>%
+  column_spec(1:2, background = "#e5f0f6")
+```
 
 **CONSULTA DE DATOS**
 =======================================================================
@@ -276,7 +310,7 @@ Row {data-height=30}
 -----------------------------------------------------------------------
 #### **CONSULTA DE DATOS DEL MONITOREO EN COSTA RICA (2015-2020)**
 
-Column {data-height=900}
+Column {data-height=750}
 -----------------------------------------------------------------------
 
 ### **Datos del monitoreo entre los años 2015 al 2020**
