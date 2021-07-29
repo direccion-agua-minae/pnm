@@ -282,7 +282,7 @@ muestreo se deberá repetir por una vez, en un período no mayor a 30 días natu
 <br>
 <br>
 
-Row {data-width=60}
+Row {data-height=120}
 -----------------------------------------------------------------------
 ### **Notas:** 
 
