@@ -52,15 +52,15 @@ caracter_separador <- ','
 ```{r, include=FALSE}
 #--------------- Archivos de datos ----------------
 
-archivo_datos_PNM <- read.csv('https://raw.githubusercontent.com/EsmeVar/PNM_FASE_5/main/2021_04_28_PNM_INFO_F5.csv', sep = ";")
+archivo_datos_PNM <- read.csv('https://raw.githubusercontent.com/direccion-agua-minae/pnm_5/main/2021_04_28_PNM_INFO_F5.csv', sep = ";")
 
 #la tabla convertirla en un shape, en QGIS de csv a shp y la agregarla directamenete y le doy la proyección
-PNM <- st_read("C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/DATOS_PNM/PNM_WGS84_2.shp") %>%
+PNM <- st_read("C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM/ARCHIVOS_INFORMACION_PUBLICADA/PNM_WGS84_2.shp") %>%
   st_transform(4326) %>%
   st_make_valid()
 
 #Cuencas para mostrar en el mapa
-cuencas <- st_read("C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/DATOS_PNM/Cuencas hidrograficas/CUencas hidrograficas.shp")%>%
+cuencas <- st_read("C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM/ARCHIVOS_INFORMACION_PUBLICADA/Cuencas hidrograficas/CUencas hidrograficas.shp")%>%
   st_transform(4326) %>%
   st_make_valid()
 
@@ -100,9 +100,9 @@ Column {.sidebar}
 -----------------------------------------------------------------------
 <br>
 <br>
-[![Dirección de Agua](C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/LOGOS DA-MINAE/da-logo230x.png)](http://www.da.go.cr)
+[![Dirección de Agua](C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM/ARCHIVOS_INFORMACION_PUBLICADA/da-logo230x.png)](http://www.da.go.cr)
 
-[![MINAE](C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/LOGOS DA-MINAE/Logo MINAE 2020_230x.jpg)](https://minae.go.cr/)
+[![MINAE](C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM/ARCHIVOS_INFORMACION_PUBLICADA/Logo MINAE 2020_230x.jpg)](https://minae.go.cr/)
 
 <br>
 <br>
@@ -310,7 +310,7 @@ Row {data-height=30}
 -----------------------------------------------------------------------
 #### **CONSULTA DE DATOS DEL MONITOREO EN COSTA RICA (2015-2020)**
 
-Column {data-height=750}
+Column {data-height=900}
 -----------------------------------------------------------------------
 
 ### **Datos del monitoreo entre los años 2015 al 2020**
@@ -345,7 +345,8 @@ leaflet() %>%
                "Año de muestreo final: ", PNM$An.O.FINAL, "<br>",
                "Provincia: ", PNM$Provincia, "<br>",
                "Cantón: ", PNM$Canton, "<br>",
-               "Distrito: ", PNM$Distrito, "<br>")) %>%
+               "Distrito: ", PNM$Distrito, "<br>",
+               "Estado Actual: ", PNM$ESTADO.AC, "<br>")) %>%
   addPolygons(
     data = sf_datos,
     stroke=T, fillOpacity = 0,
